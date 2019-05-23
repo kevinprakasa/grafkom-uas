@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>bunGLon | Final!</title>
+
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <canvas id="gl-canvas">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+
+    <div style="margin-left:20px">
+        <div>
+            <input id="lighting" type="checkbox">
+            <label for="lighting">Click here to toggle lighting</label>
+        </div>
+        <br> a/s/d/w | mengerakkan wanita warna merah
+        <br> &larr;/&rarr;/&uarr;/&darr; | mengerakkan camera dan spot lighting (harus mode PoV)
+        <br> q | mode wire frame
+        <br> space | toggle PoV camera
+        <br> z/x | menggerakan robot warna hijau kiri kanan
+        <br> &lt;/&gt; | menggerakan monyet warna coklat kiri kanan
+        <br><strong>Click <a target="_blank" href="http://128.199.161.1:8000">disini</a> untuk versi live. Untuk menjalankan di local diperulkan webserver</strong>
+    </div>
+
+
+    <script id="vs" type="x-shader/x-vertex">
+    attribute vec4 a_position;
+    attribute vec3 a_normal;
+    attribute vec2 a_texcoord;
+
+    varying vec4 v_color;
+    varying vec3 v_normal;
+    varying vec3 v_surfaceToLight;
+    varying vec3 v_surfaceToCamera;
+    varying vec3 v_surfaceToSpotLight;
+    varying vec2 v_texCoord;
+
+    uniform mat4 u_modelMatrix;
+    uniform mat4 u_viewMatrix;
+    uniform mat4 u_projectionMatrix;
+    uniform mat4 u_worldInverseMatrix;
+    
+    uniform vec3 u_color;
+    uniform vec3 u_lightPosition;
+    uniform vec3 u_cameraPosition;
+    uniform vec3 u_spotLightPosition;
+
+    void main()
+    {
+        gl_Position = u_projectionMatrix * u_viewMatrix * u_modelMatrix * vec4(a_position.xyz,1.0);
+        v_color = vec4(u_color, 1.0);
+        v_normal = mat3(u_worldInverseMatrix) * a_normal;
+        vec3 surfaceWorldPosition = (u_modelMatrix * a_position).xyz;
+        v_surfaceToLight = u_lightPosition - surfaceWorldPosition;
+        v_surfaceToSpotLight = u_spotLightPosition - surfaceWorldPosition;
+        v_surfaceToCamera = u_cameraPosition - surfaceWorldPosition;
+        v_texCoord = a_texcoord;
+
+    }
+    </script>
+
+    <script id="fs" type="x-shader/x-fragment">
+
+    precision mediump float;
+
+    varying vec4 v_color;
+    varying vec3 v_normal;
+    varying vec3 v_surfaceToLight;
+    varying vec3 v_surfaceToCamera;
+    varying vec2 v_texCoord;
+    varying vec3 v_surfaceToSpotLight;
+
+    uniform vec3 u_lightDirection;
+
+    uniform float u_shininess;
+    uniform int u_isTexture;
+    uniform int u_isSpotLight;
+    uniform sampler2D u_texture;
+    uniform vec3 u_spotLightDirection;
+    uniform float u_spotLightLimit;
+
+    void main()
+    {
+        gl_FragColor = v_color;
+
+        vec3 normal = normalize(v_normal);
+        vec3 surfaceToLight = normalize(v_surfaceToLight);
+        vec3 lightDirection = normalize(u_lightDirection);
+        vec3 surfaceToCamera = normalize(v_surfaceToCamera);
+        vec3 surfaceToSpotLight = normalize(v_surfaceToSpotLight);
+
+        vec3 halfVector = normalize(surfaceToLight + surfaceToCamera);
+        vec3 halfVectorSpotLight = normalize(surfaceToSpotLight + surfaceToCamera);
+
+        float pointLighting = dot(normal, surfaceToLight);
+        float directionalLighting = dot(normal, lightDirection);
+
+        float spotLighting = 0.0;
+        float specularSpotLight =0.0;
+
+        float dotFromDirection = dot(surfaceToSpotLight, -u_spotLightDirection);
+        if (dotFromDirection >= u_spotLightLimit) {
+            spotLighting = dot(normal, surfaceToSpotLight);
+            if(spotLighting > 0.0) {
+                specularSpotLight = pow(dot(normal, halfVectorSpotLight), u_shininess);
+            }
+        }
+
+        
+        float specular = 0.0;
+        if(pointLighting > 0.0) {
+            specular = pow(dot(normal, halfVector), u_shininess);
+        }
+        
+        if(u_isTexture == 1) {
+            gl_FragColor*=texture2D( u_texture, v_texCoord );
+        }
+        if(u_isSpotLight == 1) {
+            gl_FragColor.rgb *= spotLighting;
+            gl_FragColor.rgb += specularSpotLight;
+            return;
+        }
+        gl_FragColor.rgb *= pointLighting;
+        gl_FragColor.rgb *= directionalLighting;
+        gl_FragColor.rgb += specular;
+ 
+    }
+    </script>
+    <script type="text/javascript" src="vendor/webgl-obj-loader.min.js"></script>
+    <script type="text/javascript" src="vendor/twgl-full.min.js"></script>
+    <script type="text/javascript" src="MatrixStack.js"></script>
+    <script type="text/javascript" src="object.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+</body>
+
+</html>
