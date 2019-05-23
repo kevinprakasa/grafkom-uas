@@ -13,7 +13,7 @@ var parameter = {
 	},
 	walkingGirl: {
 		translateX: 0,
-		translateZ: -5,
+		translateZ: -6,
 		rotate: 0,
 	},
 	suzanne: {
@@ -21,14 +21,14 @@ var parameter = {
 		rotationY: 0
 	},
 	planet: {
-		translation: [0, 2, 10],
+		translation: [-10, 5, 10],
 		rotationX: 0,
 		rotationY: 0,
 		rotationZ: 0
 	},
 	jellyhead: {
 		rotationY: 0,
-		translation: [ -3, 2, 0],
+		translation: [ -6, 2, 1],
 		childs: {
 			leg1: {
 				translation: [1.3, -1.4, 0],
@@ -59,6 +59,7 @@ var robotState = {
 	Z_THRESHOLD : 20,
 	Z_MIN_THRESHOLD : 5
 };
+
 
 var robotAction = {
 	current_state : robotState.S_Z_MAJU,
@@ -307,7 +308,7 @@ var world = {
 		translation: [1, -5, 2],
 		scale: [100, 1, 100],
 		color: [1, 1, 1],
-		texture: 'texture5'
+		texture: 'wooden'
 	},
 	wall: {
 		rotationY: 0,
@@ -329,12 +330,13 @@ var world = {
 var suzanne = {
 	head: {
 		rotationY() {
-			return parameter.spinner.rotation;
+			return 0;
 		},
-		translation: [0, 1.3, 0],
-		scale: [2, 1, 2.5],
-		color: [0.545, 0.27, 0.07],
+		translation: [0, 1, 0],
+		scale: [0.35, 0.35, 0.25],
+		color: [1, 1, 1],
 		objName: 'suzanne',
+		rotationX: -90,
 		function: ROTATION_Y,
 		texture: 'texture5'
 	},
@@ -346,7 +348,7 @@ var suzanne = {
 			return parameter.suzanne.translation;
 		},
 		scale: [1, 2, 1],
-		color: [0.545, 0.27, 0.07],
+		color: [1, 1, 1],
 		objName: 'cylinder',
 		function : TRANSLATE | ROTATION_Y,
 		texture: 'texture4'
@@ -356,28 +358,14 @@ var suzanne = {
 		translation: [1.9, 0.5, 0],
 		scale: [1, 0.2, 1],
 		objName: 'sphere',
-		color: [0.545, 0.27, 0.07],
+		color: [1, 1, 1],
 	},
 	hand2: {
 		rotationY: 0,
 		translation: [-1.9, 0.5, 0],
 		scale: [1, 0.2, 1],
 		objName: 'sphere',
-		color: [0.545, 0.27, 0.07],
-	},
-	leg1: {
-		rotationY: 0,
-		translation: [-0.7, -1.5, 0],
-		scale: [0.3, 0.5, 0.3],
-		objName: 'sphere',
-		color: [0.545, 0.27, 0.07],
-	},
-	leg2: {
-		rotationY: 0,
-		translation: [0.7, -1.5, 0],
-		scale: [0.3, 0.5, 0.3],
-		objName: 'sphere',
-		color: [0.545, 0.27, 0.07],
+		color: [1, 1, 1],
 	},
 	hierarchy: [{
 		name: 'body',
@@ -393,14 +381,6 @@ var suzanne = {
 			},
 			{
 				name: 'hand2',
-				hasChild: false
-			},
-			{
-				name: 'leg1',
-				hasChild: false
-			},
-			{
-				name: 'leg2',
 				hasChild: false
 			},
 		]
@@ -421,6 +401,19 @@ var test = {
 		hasChild: false,
 	}]
 }
+
+var lamp = {
+	lamp: {
+		translation: [-9.5,3.5,3],
+		scale: [0.1,0.1,0.1],
+		color: [1,1,1],
+		objName: 'sphere'
+	},
+	hierarchy: [{
+		name: 'lamp',
+		hasChild: false
+	}]
+};
 
 var jellyhead = {
 	jellyhead: {
@@ -510,23 +503,23 @@ var jellyhead = {
 
 var spinner = {
 	ring1: {
-		translation: [-10, 0, -10],
-		scale: [10, 10, 10],
-		color: [1.0, 1.0, 1.0],
+		translation: [-15, 0, -15],
+		scale: [30, 30, 30],
+		color: [1.0, 0, 0],
 		objName: 'torus',
 		texture: 'texture4'
 	},
 	ring2: {
-		translation: [10, 0, -10],
-		scale: [10, 10, 10],
-		color: [1.0, 1.0, 1.0],
+		translation: [15, 0, -15],
+		scale: [30, 30, 30],
+		color: [0, 1.0, 0],
 		objName: 'torus',
 		texture: 'texture4'
 	},
 	ring3: {
-		translation: [0, 0, 10],
-		scale: [10, 10, 10],
-		color: [1.0, 1.0, 1.0],
+		translation: [0, 0, 15],
+		scale: [30, 30, 30],
+		color: [0, 0, 1.0],
 		objName: 'torus',
 		texture: 'texture4'
 	},
@@ -566,9 +559,10 @@ var walkingGirl = {
 		translation() {
 			return [parameter.walkingGirl.translateX, -2, parameter.walkingGirl.translateZ]
 		},
-		scale: [1, 1, 1],
+		scale: [0.02, 0.02, 0.02],
 		objName: 'WalkingGirl',
-		color: [1, 0, 0],
+		color: [0, 0, 0],
+		rotationX: -90,
 		rotationY() {
 			return parameter.walkingGirl.rotate;
 		},
@@ -595,26 +589,41 @@ var planet = {
 		rotationZ(){
 			return parameter.planet.rotationZ;
 		},
-		scale: [0.4,0.4,0.4],
+		scale: [0.6,0.6,0.6],
 		objName: "sphere",
+		color: [0,0,1],
 		function : TRANSLATE | ROTATION_Y | ROTATION_X | ROTATION_Z,
 		texture: 'texture3'
 	},
-
+	orbit2: {
+		translation: [1.1, 1.1 , 1.1],
+		scale: [1,1,1],
+		color: [1,0,0],
+		objName: "sphere"
+	},
+	orbit1: {
+		translation: [-1.1, -1.1, -1.1],
+		scale: [1,1,1],
+		color: [1,0,0],
+		objName: "sphere"
+	},
 	satellite1: {
 		translation: [1.5,1.5,-1.5],
 		scale: [0.3,0.3,0.3],
+		color: [1,0,0],
 		objName: "sphere"
 	},
 	satellite2: {
 		translation: [-1.5,1.5,1.5],
 		scale: [0.3,0.3,0.3],
+		color: [0,0,1],
 		objName: "sphere"
 	},
 
 	satellite3: {
 		translation: [1.5,-1.5,1.5],
 		scale: [0.3,0.3,0.3],
+		color: [1,0,0],
 		objName: "sphere"
 	},
 
@@ -634,6 +643,14 @@ var planet = {
 		{
 			name: 'satellite3',
 			hasChild: false
+		},
+		{
+			name: 'orbit2',
+			hasChild: false,
+		},
+		{
+			name: 'orbit1',
+			hasChild: false,
 		}
 		]
 	}
