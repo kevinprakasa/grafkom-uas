@@ -124,12 +124,12 @@ function render() {
     updateParameter();
     setProjection();
     setCameraAndSpotLight();
-    drawObject(suzanne);
-    drawObject(spinner);
-    drawObject(world);
-    drawObject(walkingGirl);
-    drawObject(planet);
-    drawObject(jellyhead);
+    drawNode(suzanne);
+    drawNode(spinner);
+    drawNode(world);
+    drawNode(walkingGirl);
+    drawNode(planet);
+    drawNode(jellyhead);
     requestAnimationFrame(render);
 }
 var time = 0;
@@ -177,17 +177,17 @@ function updateParameter() {
     }
 }
 
-function drawObject(object) {
+function drawNode(object) {
     let hierarchy = object.hierarchy;
 
-    drawObjectHelper(object, hierarchy);
+    drawNodeHelper(object, hierarchy);
 }
 
-function drawObjectHelper(object, hierarchy) {
+function drawNodeHelper(object, hierarchy) {
     for (let component of hierarchy) {
         defineModelViewMatrix(object[component.name], component.hasChild);
         if (component.hasChild) {
-            drawObjectHelper(object, component.childs);
+            drawNodeHelper(object, component.childs);
 
             matrixStack.restore();
         }
