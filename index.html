@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>bunGLon | Final!</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
 
     <link rel="stylesheet" href="main.css">
 </head>
@@ -15,18 +16,31 @@
         Oops ... your browser doesn't support the HTML5 canvas element
     </canvas>
 
-    <div style="margin-left:20px">
-        <div>
-            <input id="lighting" type="checkbox">
-            <label for="lighting">Click here to toggle lighting</label>
+    <div>
+        <div class="double-border">
+            <h1 class="yellow">Tugas Proyek bunGLon</h1>
+            <h3>Contributors:</h3>
+            <p>1706124176 - Tjandra Satria Gunawan</p>
+            <p>1606917696 - Kevin Prakasa</p>
+            <p>1606878871 - Justin</p>
         </div>
-        <br> a/s/d/w | mengerakkan wanita warna merah
-        <br> &larr;/&rarr;/&uarr;/&darr; | mengerakkan camera dan spot lighting (harus mode PoV)
-        <br> q | mode wire frame
-        <br> space | toggle PoV camera
-        <br> z/x | menggerakan robot warna hijau kiri kanan
-        <br> &lt;/&gt; | menggerakan monyet warna coklat kiri kanan
-        <br><strong>Click <a target="_blank" href="http://128.199.161.1:8000">disini</a> untuk versi live. Untuk menjalankan di local diperulkan webserver</strong>
+        <div>
+                <button id="toggleDemo">Toggle Demo</button>
+        </div>
+        <div>
+            <button id="toggleSpotLight">Toggle Spot Light</button>
+            <button id="togglePointLight"> Toggle Point Light</button>
+        </div>
+        <div class="instruction">
+            
+            <br> <span class="yellow">A,S,D,W</span> | mengerakkan Objek Kamera
+            <br> <span class="yellow">&larr;, &rarr;, &uarr;, &darr;</span> | mengerakkan camera dan spot lighting (harus mode PoV)
+            <br> <span class="yellow">q </span>| mode wire frame
+            <br> <span class="yellow">space</span> | toggle PoV camera
+            <br> <span class="yellow">z, x </span>| menggerakan Objek Atom
+            <br> <span class="yellow">&lt;, &gt; </span>| menggerakan Objek Piala
+            <br><br><strong>Please open with Mozilla Firefox / Microsoft Edge</strong>
+        </div>
     </div>
 
 

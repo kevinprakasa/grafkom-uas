@@ -11,7 +11,9 @@ var povCamera = [0, -2, -5];
 var cameraAngel = 0;
 var cameraAngelX = 0;
 var spotLightTarget = [0, 0, 0];
-var isAnimate = false;
+var isAnimate = true;
+var lightType = "directional";
+var checked = true;
 
 var textures;
 var uniforms = {
@@ -134,6 +136,8 @@ function render() {
 }
 var time = 0;
 function updateParameter() {
+    // console.log(isAnimate);
+    
     if (isAnimate) {
 
         if (robotAction.current_state == robotState.S_Z_MAJU ||
@@ -357,13 +361,28 @@ window.onkeydown = function (event) {
 }
 
 function initHandler() {
-    document.getElementById("lighting").addEventListener('change', function () {
-        if (this.checked) {
+    document.getElementById("toggleSpotLight").onclick = function () {
+        if (checked) {
             uniforms.u_isSpotLight = 1;
         } else {
             uniforms.u_isSpotLight = 0;
         }
-    }, false);
+        checked = !checked;
+    };
+    document.getElementById("toggleDemo").onclick = function(){
+        isAnimate = !isAnimate;
+    };
+    document.getElementById("togglePointLight").onclick = function(){
+        if(lightType !== "pointLight") {
+            uniforms.u_lightDirection = [0.0, 0.5, -1];
+            uniforms.u_lightPosition = [-10, 4, 3];
+            lightType = "pointLight";
+        } else {
+            uniforms.u_lightDirection = [0.0, 0.5, -0.5];
+            uniforms.u_lightPosition = [0, 0, -10];
+            lightType = "directional";
+        }
+    };
 }
 
 function radians(degrees) {

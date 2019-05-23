@@ -1,10 +1,48 @@
-body {
-    margin: 0;
-    font-family: monospace;
-  }
+html {
+  width: 100vw;
+}
 
+body {
+  background-color: black;
+  color: white;
+  min-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  text-align: center;
+  font-family: 'Roboto Slab', serif;
+}
   canvas {
     display: block;
     width: 100vw;
     height: 80vh;
   }
+
+  button {
+    background-color: black;
+    border: 2px solid white;
+    color: white;
+    border-radius: 5px;
+    margin: 1em;
+    padding: 1em;
+  }
+
+  .double-border {
+    width: 50%;
+    margin: auto;
+    border: 1px solid white;
+  }
+
+  .instruction {
+    padding: 1rem;
+    width: 50%;
+    margin: auto;
+    text-align: left;
+    /* margin-left: 50px; */
+    /* margin: 0auto; */
+  }
+
+  .yellow {
+    color: yellow;
+    font-weight: bolder;
+  }
+  
